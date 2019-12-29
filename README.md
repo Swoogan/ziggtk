@@ -1,6 +1,6 @@
 # ZIG GTK+
 
-Sample "hello world" GTK+ applications in [zig](https://ziglang.org/). Based on the examples at [GTK Getting Started](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html)
+Sample "hello world" GTK+ applications in [zig](https://ziglang.org/). Based on the examples at [GTK+ Getting Started](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html)
 
 There are two applications:
 
