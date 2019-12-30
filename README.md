@@ -11,6 +11,8 @@ The manual application uses the in-code method of defining the UI. The builder a
 
 ## Build
 
+Built with zig v0.5.0 on Ubuntu 18.04
+
     zig build
 
 ## Run
