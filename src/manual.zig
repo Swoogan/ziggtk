@@ -37,11 +37,9 @@ pub fn main() u8 {
     var zero: u32 = 0;
     const flags: *GConnectFlags = @ptrCast(*GConnectFlags, &zero);
     // could not get `g_signal_connect` to work. Zig says "use of undeclared identifier"
-    const sig = g_signal_connect_data(app, c"activate", @ptrCast(GCallback, activate), null, null, flags.*);
+    _ = g_signal_connect_data(app, c"activate", @ptrCast(GCallback, activate), null, null, flags.*);
 
     const status: i32 = g_application_run(@ptrCast(*GApplication, app), 0, null);
-
-    std.debug.warn("All your base are belong to us.\n");
 
     return @intCast(u8, status);
 }

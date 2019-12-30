@@ -27,16 +27,16 @@ pub fn main() u8 {
     var zero: u32 = 0;
     const flags: *GConnectFlags = @ptrCast(*GConnectFlags, &zero);
 
-    var sig = g_signal_connect_data(window, c"destroy", @ptrCast(GCallback, gtk_main_quit), null, null, flags.*);
+    _ = g_signal_connect_data(window, c"destroy", @ptrCast(GCallback, gtk_main_quit), null, null, flags.*);
 
     var button = gtk_builder_get_object(builder, c"button1");
-    sig = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, print_hello), null, null, flags.*);
+    _ = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, print_hello), null, null, flags.*);
 
     button = gtk_builder_get_object (builder, c"button2");
-    sig = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, print_hello), null, null, flags.*);
+    _ = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, print_hello), null, null, flags.*);
 
     button = gtk_builder_get_object (builder, c"quit");
-    sig = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, gtk_main_quit), null, null, flags.*);
+    _ = g_signal_connect_data(button, c"clicked", @ptrCast(GCallback, gtk_main_quit), null, null, flags.*);
 
     gtk_main();
 
