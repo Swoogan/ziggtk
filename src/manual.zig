@@ -15,6 +15,7 @@ fn activate(app: *GtkApplication, user_data: gpointer) void {
     gtk_container_add (@ptrCast(*GtkContainer, window), button_box);
 
     const button: *GtkWidget = gtk_button_new_with_label(c"Hello World");
+
     var zero: u32 = 0;
     const flags: *GConnectFlags = @ptrCast(*GConnectFlags, &zero);
     // could not get `g_signal_connect` to work. Zig says "use of undeclared identifier"
