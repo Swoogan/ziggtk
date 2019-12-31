@@ -3,7 +3,7 @@ pub usingnamespace @cImport({
 });
 
 pub fn print_hello(widget: *GtkWidget, data: gpointer) void {
-    g_print (c"Hello World\n");
+    g_print ("Hello World\n");
 }
 
 /// Could not get `g_signal_connect` to work. Zig says "use of undeclared identifier". Reimplemented here
