@@ -8,8 +8,8 @@ fn activate(app: *GtkApplication, user_data: gpointer) void {
 
     const button: *GtkWidget = gtk_button_new_with_label("Hello World");
 
-    _ = g_signal_connect(button, "clicked", @ptrCast(GCallback, print_hello), null);
-    _ = g_signal_connect_swapped(button, "clicked", @ptrCast(GCallback, gtk_widget_destroy), window);
+    _ = g_signal_connect_(button, "clicked", @ptrCast(GCallback, print_hello), null);
+    _ = g_signal_connect_swapped_(button, "clicked", @ptrCast(GCallback, gtk_widget_destroy), window);
     gtk_container_add(@ptrCast(*GtkContainer, button_box), button);
 
     const w = @ptrCast(*GtkWindow, window);
@@ -22,7 +22,7 @@ pub fn main() u8 {
     var app = gtk_application_new("org.gtk.example", .G_APPLICATION_FLAGS_NONE);
     defer g_object_unref(app);
 
-    _ = g_signal_connect(app, "activate", @ptrCast(GCallback, activate), null);
+    _ = g_signal_connect_(app, "activate", @ptrCast(GCallback, activate), null);
     const status: i32 = g_application_run(@ptrCast(*GApplication, app), 0, null);
 
     return @intCast(u8, status);
