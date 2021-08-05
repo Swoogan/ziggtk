@@ -3,11 +3,14 @@ pub usingnamespace @cImport({
 });
 
 pub fn print_hello(widget: *GtkWidget, data: gpointer) void {
+    _ = data;
+    _ = widget;
     g_print("Hello World\n");
 }
 
 /// Could not get `g_signal_connect` to work. Zig says "use of undeclared identifier". Reimplemented here
 pub fn g_signal_connect_(instance: gpointer, detailed_signal: [*c]const gchar, c_handler: GCallback, data: gpointer) gulong {
+    _ = data;
     var zero: u32 = 0;
     const flags: *GConnectFlags = @ptrCast(*GConnectFlags, &zero);
     return g_signal_connect_data(instance, detailed_signal, c_handler, null, null, flags.*);
@@ -15,5 +18,5 @@ pub fn g_signal_connect_(instance: gpointer, detailed_signal: [*c]const gchar, c
 
 /// Could not get `g_signal_connect_swapped` to work. Zig says "use of undeclared identifier". Reimplemented here
 pub fn g_signal_connect_swapped_(instance: gpointer, detailed_signal: [*c]const gchar, c_handler: GCallback, data: gpointer) gulong {
-    return g_signal_connect_data(instance, detailed_signal, c_handler, data, null, .G_CONNECT_SWAPPED);
+    return g_signal_connect_data(instance, detailed_signal, c_handler, data, null, G_CONNECT_SWAPPED);
 }

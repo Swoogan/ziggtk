@@ -24,6 +24,8 @@ pub fn main() u8 {
     var zero: u32 = 0;
     const flags: *GConnectFlags = @ptrCast(*GConnectFlags, &zero);
 
+    _ = flags;
+
     _ = g_signal_connect_(window, "destroy", @ptrCast(GCallback, gtk_main_quit), null);
 
     var button = gtk_builder_get_object(builder, "button1");
