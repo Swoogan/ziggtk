@@ -1,9 +1,10 @@
 pub usingnamespace @import("gtk.zig");
 
 fn activate(app: *GtkApplication, user_data: gpointer) void {
+    _ = user_data;
     const window: *GtkWidget = gtk_application_window_new(app);
 
-    const button_box: *GtkWidget = gtk_button_box_new(.GTK_ORIENTATION_HORIZONTAL);
+    const button_box: *GtkWidget = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_container_add(@ptrCast(*GtkContainer, window), button_box);
 
     const button: *GtkWidget = gtk_button_new_with_label("Hello World");
@@ -19,7 +20,7 @@ fn activate(app: *GtkApplication, user_data: gpointer) void {
 }
 
 pub fn main() u8 {
-    var app = gtk_application_new("org.gtk.example", .G_APPLICATION_FLAGS_NONE);
+    var app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
     defer g_object_unref(app);
 
     _ = g_signal_connect_(app, "activate", @ptrCast(GCallback, activate), null);
