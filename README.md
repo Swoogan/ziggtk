@@ -11,7 +11,7 @@ There are three applications:
 
 ## Build
 
-Built with zig v0.5.0 on Ubuntu 18.04
+Ensure libgtk3 development headers are installed (ex: libgtk-3-dev). Tested with zig v0.8.1 on Ubuntu 20.04.
 
     zig build
 
