@@ -1,29 +1,29 @@
-pub usingnamespace @import("gtk.zig");
+const gtk = @import("gtk.zig");
 
-fn activate(app: *GtkApplication, user_data: gpointer) void {
-    const window: *GtkWidget = gtk_application_window_new(app);
+fn activate(app: *gtk.GtkApplication, _: gtk.gpointer) void {
+    const window: *gtk.GtkWidget = gtk.gtk_application_window_new(app);
 
-    const button_box: *GtkWidget = gtk_button_box_new(.GTK_ORIENTATION_HORIZONTAL);
-    gtk_container_add(@ptrCast(*GtkContainer, window), button_box);
+    const button_box: *gtk.GtkWidget = gtk.gtk_button_box_new(gtk.GTK_ORIENTATION_HORIZONTAL);
+    gtk.gtk_container_add(@ptrCast(*gtk.GtkContainer, window), button_box);
 
-    const button: *GtkWidget = gtk_button_new_with_label("Hello World");
+    const button: *gtk.GtkWidget = gtk.gtk_button_new_with_label("Hello World");
 
-    _ = g_signal_connect_(button, "clicked", @ptrCast(GCallback, print_hello), null);
-    _ = g_signal_connect_swapped_(button, "clicked", @ptrCast(GCallback, gtk_widget_destroy), window);
-    gtk_container_add(@ptrCast(*GtkContainer, button_box), button);
+    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk.g_signal_connect_swapped_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.gtk_widget_destroy), window);
+    gtk.gtk_container_add(@ptrCast(*gtk.GtkContainer, button_box), button);
 
-    const w = @ptrCast(*GtkWindow, window);
-    gtk_window_set_title(w, "Window");
-    gtk_window_set_default_size(w, 800, 600);
-    gtk_widget_show_all(window);
+    const w = @ptrCast(*gtk.GtkWindow, window);
+    gtk.gtk_window_set_title(w, "Window");
+    gtk.gtk_window_set_default_size(w, 800, 600);
+    gtk.gtk_widget_show_all(window);
 }
 
 pub fn main() u8 {
-    var app = gtk_application_new("org.gtk.example", .G_APPLICATION_FLAGS_NONE);
-    defer g_object_unref(app);
+    var app = gtk.gtk_application_new("org.gtk.example", gtk.G_APPLICATION_FLAGS_NONE);
+    defer gtk.g_object_unref(app);
 
-    _ = g_signal_connect_(app, "activate", @ptrCast(GCallback, activate), null);
-    const status: i32 = g_application_run(@ptrCast(*GApplication, app), 0, null);
+    _ = gtk.g_signal_connect_(app, "activate", @ptrCast(gtk.GCallback, &activate), null);
+    const status: i32 = gtk.g_application_run(@ptrCast(*gtk.GApplication, app), 0, null);
 
     return @intCast(u8, status);
 }
