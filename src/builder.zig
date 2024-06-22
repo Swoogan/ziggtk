@@ -1,5 +1,4 @@
 const gtk = @import("gtk.zig");
-const std = @import("std");
 
 pub fn main() u8 {
     gtk.gtk_init(0, null);
@@ -15,18 +14,21 @@ pub fn main() u8 {
     }
 
     // Connect signal handlers to the constructed widgets.
-    const window = gtk.gtk_builder_get_object(builder, "window");
+    const window: [*c]gtk.GObject = gtk.gtk_builder_get_object(builder, "window");
 
-    _ = gtk.g_signal_connect_(window, "destroy", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    const print_hello_callback: gtk.GCallback = @ptrCast(&gtk.print_hello);
+    const main_quit_callback: gtk.GCallback = @ptrCast(&gtk.gtk_main_quit);
+
+    _ = gtk._g_signal_connect(window, "destroy", main_quit_callback, null);
 
     var button = gtk.gtk_builder_get_object(builder, "button1");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
 
     button = gtk.gtk_builder_get_object(builder, "button2");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
 
     button = gtk.gtk_builder_get_object(builder, "quit");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    _ = gtk._g_signal_connect(button, "clicked", main_quit_callback, null);
 
     gtk.gtk_main();
 

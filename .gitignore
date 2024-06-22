@@ -1,3 +1,4 @@
 .vscode
-zig-cache
+.zig-cache
+zig-out
 bin

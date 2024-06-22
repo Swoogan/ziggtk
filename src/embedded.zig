@@ -1,7 +1,6 @@
 const gtk = @import("gtk.zig");
-const std = @import("std");
 
-const builderDecl = @embedFile("./builder.ui");
+const file: *const [1496:0]u8 = @embedFile("./builder.ui");
 
 pub fn main() u8 {
     gtk.gtk_init(0, null);
@@ -9,28 +8,29 @@ pub fn main() u8 {
     const builder: *gtk.GtkBuilder = gtk.gtk_builder_new();
     var err: [*c]gtk.GError = null;
 
-    var bdp: [*c]const u8 = builderDecl;
-
     // Construct a GtkBuilder instance and load our UI description
-    if (gtk.gtk_builder_add_from_string(builder, bdp, builderDecl.len, &err) == 0) {
+    if (gtk.gtk_builder_add_from_string(builder, file, file.len, &err) == 0) {
         gtk.g_printerr("Error loading embedded builder: %s\n", err.*.message);
         gtk.g_clear_error(&err);
         return 1;
     }
 
     // Connect signal handlers to the constructed widgets.
-    const window = gtk.gtk_builder_get_object(builder, "window");
+    const window: [*c]gtk.GObject = gtk.gtk_builder_get_object(builder, "window");
 
-    _ = gtk.g_signal_connect_(window, "destroy", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    const print_hello_callback: gtk.GCallback = @ptrCast(&gtk.print_hello);
+    const main_quit_callback: gtk.GCallback = @ptrCast(&gtk.gtk_main_quit);
+
+    _ = gtk._g_signal_connect(window, "destroy", main_quit_callback, null);
 
     var button = gtk.gtk_builder_get_object(builder, "button1");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
 
     button = gtk.gtk_builder_get_object(builder, "button2");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
 
     button = gtk.gtk_builder_get_object(builder, "quit");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    _ = gtk._g_signal_connect(button, "clicked", main_quit_callback, null);
 
     gtk.gtk_main();
 

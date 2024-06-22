@@ -1,5 +1,8 @@
 # ZIG GTK+
 
+> [!IMPORTANT]  
+> Works with zig version 0.13.0 and may not work in older versions.
+
 Sample "hello world" GTK+ applications in [zig](https://ziglang.org/). Based on the examples at [GTK+ Getting Started](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html)
 
 There are three applications:
