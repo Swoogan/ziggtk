@@ -1,27 +1,22 @@
 const gtk = @import("gtk.zig");
 
-const file: *const [1496:0]u8 = @embedFile("./builder.ui");
+const file: *const [1476:0]u8 = @embedFile("./window.ui");
 
-pub fn main() u8 {
-    gtk.gtk_init(0, null);
-
-    const builder: *gtk.GtkBuilder = gtk.gtk_builder_new();
+fn activate(app: [*c]gtk.GtkApplication, _: gtk.gpointer) void {
+    const builder: *gtk.GtkBuilder = gtk.gtk_builder_new().?;
+    defer gtk.g_object_unref(builder);
     var err: [*c]gtk.GError = null;
 
-    // Construct a GtkBuilder instance and load our UI description
     if (gtk.gtk_builder_add_from_string(builder, file, file.len, &err) == 0) {
-        gtk.g_printerr("Error loading embedded builder: %s\n", err.*.message);
+        gtk.g_printerr("Error loading embedded file: %s\n", err.*.message);
         gtk.g_clear_error(&err);
-        return 1;
     }
 
-    // Connect signal handlers to the constructed widgets.
-    const window: [*c]gtk.GObject = gtk.gtk_builder_get_object(builder, "window");
+    const window: [*c]gtk.GtkWindow = @ptrCast(gtk.gtk_builder_get_object(builder, "window"));
+    gtk.gtk_window_set_application(window, app);
 
     const print_hello_callback: gtk.GCallback = @ptrCast(&gtk.print_hello);
-    const main_quit_callback: gtk.GCallback = @ptrCast(&gtk.gtk_main_quit);
-
-    _ = gtk._g_signal_connect(window, "destroy", main_quit_callback, null);
+    const app_quit_callback: gtk.GCallback = @ptrCast(&gtk.g_application_quit);
 
     var button = gtk.gtk_builder_get_object(builder, "button1");
     _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
@@ -30,9 +25,20 @@ pub fn main() u8 {
     _ = gtk._g_signal_connect(button, "clicked", print_hello_callback, null);
 
     button = gtk.gtk_builder_get_object(builder, "quit");
-    _ = gtk._g_signal_connect(button, "clicked", main_quit_callback, null);
+    _ = gtk._g_signal_connect_swapped(button, "clicked", app_quit_callback, app);
 
-    gtk.gtk_main();
+    gtk.gtk_window_present(window);
+}
 
-    return 0;
+pub fn main() u8 {
+    const app: [*c]gtk.GtkApplication = gtk.gtk_application_new("org.gtk.example", gtk.G_APPLICATION_DEFAULT_FLAGS);
+    defer gtk.g_object_unref(app);
+
+    const activate_callback: gtk.GCallback = @ptrCast(&activate);
+    _ = gtk._g_signal_connect(app, "activate", activate_callback, null);
+
+    const g_app: [*c]gtk.GApplication = @ptrCast(app);
+    const status: u8 = @intCast(gtk.g_application_run(g_app, 0, null));
+
+    return status;
 }
