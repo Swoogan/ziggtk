@@ -1,3 +1,6 @@
 .vscode
+# 0.12.0 uses zig-cache
 zig-cache
-bin
+# 0.13.0 uses .zig-cache
+.zig-cache
+zig-out

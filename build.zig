@@ -1,39 +1,52 @@
-const Builder = @import("std").build.Builder;
+const std = @import("std");
 
-pub fn build(b: *Builder) void {
-    const mode = b.standardReleaseOptions();
-    
-    const manual = b.addExecutable("manual", "src/manual.zig");
+pub fn build(b: *std.Build) void {
+    const target = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
+
+    const manual = b.addExecutable(.{
+        .name = "manual",
+        .root_source_file = b.path("src/manual.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
 
     manual.linkSystemLibrary("c");
     manual.linkSystemLibrary("gtk+-3.0");
-    manual.setBuildMode(mode);
 
-    manual.install();
+    b.installArtifact(manual);
 
-    const builder = b.addExecutable("builder", "src/builder.zig");
+    const builder = b.addExecutable(.{
+        .name = "builder",
+        .root_source_file = b.path("src/builder.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
 
     builder.linkSystemLibrary("c");
     builder.linkSystemLibrary("gtk+-3.0");
-    builder.setBuildMode(mode);
 
-    builder.install();
+    b.installArtifact(builder);
 
-    const embedded = b.addExecutable("embedded", "src/embedded.zig");
+    const embedded = b.addExecutable(.{
+        .name = "embedded",
+        .root_source_file = b.path("src/embedded.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
 
     embedded.linkSystemLibrary("c");
     embedded.linkSystemLibrary("gtk+-3.0");
-    embedded.setBuildMode(mode);
 
-    embedded.install();
+    b.installArtifact(embedded);
 
-    const run_cmd_m = manual.run();
+    const run_cmd_m = b.addRunArtifact(manual);
     run_cmd_m.step.dependOn(b.getInstallStep());
 
-    const run_cmd_b = builder.run();
+    const run_cmd_b = b.addRunArtifact(builder);
     run_cmd_b.step.dependOn(b.getInstallStep());
 
-    const run_cmd_e = embedded.run();
+    const run_cmd_e = b.addRunArtifact(embedded);
     run_cmd_e.step.dependOn(b.getInstallStep());
 
     const run_step_m = b.step("manual", "Run the manual app");
