@@ -17,16 +17,16 @@ pub fn main() u8 {
     // Connect signal handlers to the constructed widgets.
     const window = gtk.gtk_builder_get_object(builder, "window");
 
-    _ = gtk.g_signal_connect_(window, "destroy", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    _ = gtk.g_signal_connect_(window, "destroy", @ptrCast(&gtk.gtk_main_quit), null);
 
     var button = gtk.gtk_builder_get_object(builder, "button1");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(&gtk.print_hello), null);
 
     button = gtk.gtk_builder_get_object(builder, "button2");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.print_hello), null);
+    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(&gtk.print_hello), null);
 
     button = gtk.gtk_builder_get_object(builder, "quit");
-    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(gtk.GCallback, &gtk.gtk_main_quit), null);
+    _ = gtk.g_signal_connect_(button, "clicked", @ptrCast(&gtk.gtk_main_quit), null);
 
     gtk.gtk_main();
 
